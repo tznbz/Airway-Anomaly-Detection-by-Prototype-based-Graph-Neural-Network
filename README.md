@@ -8,10 +8,10 @@ Detecting the airway anomaly can be an essential part to aid the lung disease di
 
 ## Reference
     @paper{zhao2018pyramid,
-    title={Pyramid-Based Fully Convolutional Networks for Cell Segmentation},
+    title={Airway Anomaly Detection by Prototype-based Graph Neural Network},
     author={Zhao, Tianyi and Yin, Zhaozheng},
     booktitle={International Conference on Medical Image Computing and Computer-Assisted Intervention}, 
-    pages={677--685},
-    year={2018},
+    year={2021},
     organization={Springer}
     }
+
