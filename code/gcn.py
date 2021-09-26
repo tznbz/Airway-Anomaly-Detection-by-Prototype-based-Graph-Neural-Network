@@ -88,15 +88,11 @@ if __name__ == '__main__':
     ts_x,_,_ = input_preprocess(ts_x,xmax,xmean)
     tr_x = x
     tr_y=y.astype(int)
-    val_x = ts_x
-    val_y = np.zeros([len(val_x),24],dtype=int)
     print('load data y',y.shape,y.sum(),y.sum()/24)
 
 
     tr_x = torch.from_numpy(tr_x).cuda()
     tr_y = torch.from_numpy(tr_y).cuda()
-    val_x = torch.from_numpy(val_x).cuda()
-    val_y = torch.from_numpy(val_y).cuda()
     ts_x = torch.from_numpy(ts_x).cuda()
     ts_y = torch.from_numpy(ts_y).cuda()
 
@@ -107,42 +103,15 @@ if __name__ == '__main__':
 
 
     model.cuda()
-    weights = np.ones(2)
-    weights = [1,0.7]
-    weights = np.asarray(weights)
-    weights = weights/weights.sum()
-    class_weights = torch.FloatTensor(weights).cuda()
-    loss_fn = torch.nn.CrossEntropyLoss(weight=class_weights)
-
-    learning_rate = 1e-2
-    optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate,weight_decay=1e-3)#weight_decay, momentum=0.9
-    printFrequence = 1000
-
-    for t in range(3000):
-        #tr_xa = augmentation(tr_x)
-        y_output = model(tr_x)
-        y_pred = torch.argmax(y_output,dim=1)
-        loss = loss_fn(y_output, tr_y)
-
-        ts_output = model(ts_x)
-        ts_pred = torch.argmax(ts_output, dim=1)
-        ts_pred, _ = torch.max(ts_pred, dim=1)
-        ts_sens = (ts_pred[ts_y==0] == ts_y[ts_y==0]).sum(dtype=torch.float32) / (len(ts_y[ts_y==0]))
-        ts_acc = (ts_pred == ts_y).sum(dtype=torch.float32) / (len(ts_y))
-        if t % printFrequence == printFrequence-1:
-            print('train',t, loss.item(),(y_pred == tr_y).sum(dtype=torch.float32) / (len(tr_y))/24,tr_y.shape)
-            print('test acc,sens',ts_acc,ts_sens,'\n')
+    model.load_state_dict(torch.load('mlp2_gcnpro.pth'))
 
 
-        optimizer.zero_grad()
-        loss.backward()
-        optimizer.step()
-
-
+    ts_output = model(ts_x)
+    ts_pred = torch.argmax(ts_output, dim=1)
+    ts_pred, _ = torch.max(ts_pred, dim=1)
     tx = (ts_output).cpu().detach().numpy()
     ts_y = ts_y.cpu().detach().numpy()
     ts_pred = ts_pred.cpu().detach().numpy()
-
     tss = tx.argmax(axis=1)
 
     print('test acc', (ts_pred == ts_y).sum(dtype=ts_pred.dtype) / (len(ts_y)), '\n')
