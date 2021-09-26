@@ -84,12 +84,8 @@ def branchase_label_transfer(data):
     print('data2',data.max())
     return data
 
-maskdir = '../data/train/segment_mask_revised_by_Xiaohan_processed_Tianyiprocessed/'
-resdir =  '../data/train/graph_features/'
-maskdir = '../data/test/nii/'
-resdir =  '../data/test/graph_features/'
-maskdir = '../data/test/anomaly2_labeled/'
-resdir =  '../data/test/anomaly2_graph_features/'
+maskdir = '../data/nii/'
+resdir =  '../data/graph_features/'
 
 if not os.path.exists(resdir):
     os.mkdir(resdir)
