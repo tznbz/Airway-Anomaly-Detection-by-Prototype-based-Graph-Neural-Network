@@ -20,15 +20,20 @@ Detecting the airway anomaly can be an essential part to aid the lung disease di
  
  
 ## Data
-The segmented airway mask is given in the data folder, in the NifTi format
+The segmented airway mask is given in the data folder, in the NifTi format.
 
-The processed feature vectors are saved in the data folder, in the npy format
+The processed feature vectors are saved in the data folder, in the npy format.
 
 ## Command
 To get the feature form the airway mask, run:
-
+```
+python main_generate_graph_from_nii.py
+```
 
 Run our pre-trained model:
+```
+python gcn.py
+```
 
  
  
